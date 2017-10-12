@@ -88,9 +88,8 @@ def plot(result):
     pprint(result)
 
 def main():
-    result = simulate(1)
+    result = simulate(10)
     plot(result)
-
 if __name__ == '__main__':
     main()
 
