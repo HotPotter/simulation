@@ -57,14 +57,14 @@ def update_result(result, inventory, num_boxes):
             if num_fragments == config.heroes[hero_name]:
                 result[num_boxes].append(hero_name)
 
-class BoxSim():
-    def __init__(self):
-        self.inventory = defaultdict(int)
-        self.num_boxes = 0
-        self.hero_pool = make_hero_pool()
-
-    def update_inventory(self, reward):
-        self.inventory['tiffi'] = 5
+# class BoxSim():
+#     def __init__(self):
+#         self.inventory = defaultdict(int)
+#         self.num_boxes = 0
+#         self.hero_pool = make_hero_pool()
+#
+#     def update_inventory(self, reward):
+#         self.inventory['tiffi'] = 5
 
 
 def simulate(num_players):
@@ -87,7 +87,6 @@ if __name__ == '__main__':
     main()
 '''
 
-import random
 
 class PickAndReturnHeroPool():
     def __init__(self, hero_config):
@@ -100,7 +99,7 @@ class PickAndReturnHeroPool():
     def random_choice(self, pick=1):
         return random.choices(self.heroes, self.ps, k=pick)
 
-class PickAndDropHeroPool():
+class PickAndRemoveHeroPool():
     def __init__(self, hero_config):
         pool = []
         for hero_name, num in hero_config:
@@ -122,15 +121,15 @@ print(heroes_config_list)
 pool = PickAndReturnHeroPool(heroes_config_list)
 print('pick and return 5')
 print(pool.random_choice(5))
-pool = PickAndDropHeroPool(heroes_config_list)
-print('pick and drop 5')
+pool = PickAndRemoveHeroPool(heroes_config_list)
+print('pick and  5')
 print(pool.random_choice(5))
 
 class PoolFactory():
     @classmethod
     def create_pool(cls, pool_name):
-        if pool_name == 'drop':
-            pool = PickAndDropHeroPool(heroes_config_list)
+        if pool_name == 'remove':
+            pool = PickAndRemoveHeroPool(heroes_config_list)
         elif pool_name == 'return':
             pool = PickAndReturnHeroPool(heroes_config_list)
         else:
@@ -139,8 +138,8 @@ class PoolFactory():
 
 '''
 pool_name = config.pool_name
-if pool_name == 'drop':
-    pool = PickAndDropHeroPool(heroes_config_list)
+if pool_name == 'remove':
+    pool = PickAndRemoveHeroPool(heroes_config_list)
 elif pool_name == 'return':
     pool = PickAndReturnHeroPool(heroes_config_list)
 else:
