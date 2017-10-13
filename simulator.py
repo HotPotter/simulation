@@ -133,7 +133,7 @@ class PoolFactory():
         elif pool_name == 'return':
             pool = PickAndReturnHeroPool(heroes_config_list)
         else:
-            raise 'invalid pool name'
+            raise ValueError('invalid pool name')
         return pool
 
 '''
