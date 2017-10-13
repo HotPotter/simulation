@@ -18,6 +18,9 @@ class PickAndReturnHeroPool():
     def random_choice(self, pick=1): #FIXME, pick needs to read from config
         return random.choices(self.heroes, self.ps, k=pick)
 
+    def __repr__(self):
+        return f'<Return Pool> {self.heroes}, {self.ps}'
+
 class PickAndRemoveHeroPool():
     def __init__(self, hero_config):
         pool = []
@@ -31,12 +34,17 @@ class PickAndRemoveHeroPool():
         self.pool = self.pool[pick:]
         return reward
 
+    def __repr__(self):
+        return f'<Remove pool> {self.pool}'
 
 '''define pool factory'''
 
 class PoolFactory():
     @classmethod
     def create_pool(cls, pool_name):
+        #fetch data of hero config
+        hero_config_list = [i for i in config.heroes.items()]
+
         if pool_name == 'remove':
             pool = PickAndRemoveHeroPool(hero_config_list)
         elif pool_name == 'return':
@@ -50,11 +58,14 @@ class PoolFactory():
 class player_inventory():
     pass
 
-'''fetch data of hero config'''
-hero_config_list = [i for i in config.heroes.items()]
+
+
 
 '''choose a pool'''
-chosen_pool = PoolFactory.create_pool('return')
+chosen_pool = PoolFactory.create_pool('remove')
+
+print(dir(chosen_pool))
+print(chosen_pool.pool)
 print(chosen_pool.random_choice(pick=5))
 
 
@@ -66,3 +77,9 @@ def has_reward(): #FIXME, need to be related to reward giving mechanism
     else:
         return False
 
+
+pool1 = PoolFactory.create_pool('remove')
+pool1
+print(pool1)
+pool2 = PoolFactory.create_pool('return')
+print(pool2)
