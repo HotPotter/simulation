@@ -1,3 +1,4 @@
+'''define player inventory - hero possession'''
 from collections import defaultdict
 
 class Inventory():
@@ -11,4 +12,5 @@ class Inventory():
 
     def hero_and_fragments(self):
         return self.inventory.items()
+
 

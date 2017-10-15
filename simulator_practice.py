@@ -3,83 +3,66 @@ from pprint import pprint
 from collections import defaultdict
 import random
 
+import pool
+import inventory
 
-'''define pool logic'''
-
-#FIXME, need to separate drop rate from hero composition number, read drop rate from config
-class PickAndReturnHeroPool():
-    def __init__(self, hero_config):
-        self.heroes = [] #hero name
-        self.ps = [] #drop probability
-        for hero, p in hero_config:
-            self.heroes.append(hero)
-            self.ps.append(p)
-
-    def random_choice(self, pick=1): #FIXME, pick needs to read from config
-        return random.choices(self.heroes, self.ps, k=pick)
-
-    def __repr__(self):
-        return f'<Return Pool> {self.heroes}, {self.ps}'
-
-class PickAndRemoveHeroPool():
-    def __init__(self, hero_config):
-        pool = []
-        for hero_name, num in hero_config:
-            pool += [hero_name] * num
-        random.shuffle(pool)
-        self.pool = pool
-
-    def random_choice(self, pick=1): #FIXME, pick needs to read from config
-        reward = self.pool[0:pick]
-        self.pool = self.pool[pick:]
-        return reward
-
-    def __repr__(self):
-        return f'<Remove pool> {self.pool}'
-
-'''define pool factory'''
-
-class PoolFactory():
-    @classmethod
-    def create_pool(cls, pool_name):
-        #fetch data of hero config
-        hero_config_list = [i for i in config.heroes.items()]
-
-        if pool_name == 'remove':
-            pool = PickAndRemoveHeroPool(hero_config_list)
-        elif pool_name == 'return':
-            pool = PickAndReturnHeroPool(hero_config_list)
-        else:
-            raise ValueError('invalid pool name')
-        return pool
-
-'''define player inventory - hero possession'''
-
-class player_inventory():
-    pass
-
-
-
-
-'''choose a pool'''
-chosen_pool = PoolFactory.create_pool('remove')
-
-print(dir(chosen_pool))
-print(chosen_pool.pool)
-print(chosen_pool.random_choice(pick=5))
-
-
-'''how to print the content in the pool???'''
-
-def has_reward(): #FIXME, need to be related to reward giving mechanism
-    if random.randint(0,1):
+def has_reward(): # FIXME need to be replaced by box giving mechanism
+    if random.randint(1, 1):
         return True
     else:
         return False
 
+def simulate_open_boxes():
+    result = defaultdict(list)
+    num_boxes = 0
+    player_inventory = inventory.Inventory()
+    hero_pool = pool.PoolFactory.create_pool(config.pool_name) # modify in Config
 
-pool1 = PoolFactory.create_pool('remove')
-pool1
-print(pool1)
-pool2 = PoolFactory.create_pool('return')
-print(pool2)
+    while True:
+        num_boxes += 1
+        if has_reward():
+            reward = hero_pool.random_choice(pick=config.fragments_per_box)
+            player_inventory.update(reward)
+
+        update_result(result, player_inventory, num_boxes)
+        #print(player_inventory.hero_and_fragments()) # print result of each box
+        #print(result) # print hero formation after each box
+        #print(reward) # print fragments drawn from each box
+
+        if num_boxes > 9: # FIXME stop condition
+            break
+
+    return dict(result)
+
+'''update inventory, create hero if possible'''
+def update_result(result, inventory, num_boxes):
+    for hero_name, num_fragments in inventory.hero_and_fragments():
+        formed_heroes = []
+
+        for more_heroes in result.values():
+            formed_heroes += more_heroes
+
+        if hero_name in formed_heroes:
+            continue
+
+        if num_fragments >= config.heroes[hero_name]: # calculate the formation of a hero
+            result[num_boxes].append(hero_name)
+
+def simulate(num_players):
+    result = []
+    for _ in range(num_players):
+        one_player = simulate_open_boxes()
+        result.append(one_player)
+    return result
+
+def plot(result):
+    print('Plot matplotlib:')
+    pprint(result)
+
+def main():
+    result = simulate(config.num_players)
+    plot(result)
+
+if __name__ == '__main__':
+    main()
+

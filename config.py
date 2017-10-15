@@ -1,17 +1,32 @@
-game_round_per_day = 10
-pass_rate = 0.70
-
-reward_per_x_box = 5
-reward_drop_rate = 0.5
-fragments_per_box = 5
-
-heroes = {"tiffy":5, "kimmy":5, "yeti":10, "troll":10, "toffee":15}
-heroes_json = '''{"tiffy":5, "kimmy":5, "yeti":10, "troll":10, "toffee":15}'''
-
 import json
+from collections import defaultdict
 
-json.loads(heroes_json)
+'''simulation configuration - USER INPUT'''
+fragments_per_box = 5
+pool_name = 'remove'
+num_players = 1
 
-json.dumps(heroes)
 
-pool_name = 'return'
+
+'''hero fragments in PickAndRemove pool - USER INPUT'''
+heroes_p_remove = {"tiffy":5, "kimmy":5, "yeti":10, "troll":10, "toffee":15}
+
+
+'''hero fragment drop probability in PickAndReturn pool - USER INPUT'''
+heroes_p_return= {"tiffy":5, "kimmy":5, "yeti":10, "troll":10, "toffee":15}
+
+
+'''Load hero configuration'''
+
+f_hero= json.load(open("config_hero.json", 'r'))
+hero_data=f_hero['heroes']
+heroes = {}
+for hero in hero_data:
+    heroes[hero['name']] = hero['fragment']
+
+
+
+print(heroes)
+
+
+

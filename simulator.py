@@ -5,7 +5,6 @@ import random
 
 import pool
 import inventory
-import inventory
 #from inventory import Inventory
 
 def has_reward():
