@@ -1,10 +1,12 @@
 import config
 from pprint import pprint
 from collections import defaultdict
+import collections
 import random
 
 import pool
 import inventory
+import plot
 
 def has_reward(): # FIXME need to be replaced by box giving mechanism
     if random.randint(1, 1):
@@ -47,7 +49,7 @@ def update_result(result, inventory, num_boxes):
 
         if num_fragments >= config.heroes[hero_name]: # calculate the formation of a hero
             result[num_boxes].append(hero_name)
-
+1
 def simulate(num_players):
     result = []
     for _ in range(num_players):
@@ -55,13 +57,31 @@ def simulate(num_players):
         result.append(one_player)
     return result
 
-def plot(result):
+def do_plot(result):
     print('Plot matplotlib:')
     pprint(result)
+    first_days = []
+    for days in result:
+        first_days.append(min(days))
 
+    c = collections.Counter(first_days)
+    xs = []
+    ys = []
+    for x, y in c.items():
+        xs.append(x)
+        ys.append(y)
+    #c1 = [(x, y) for x, y in c.items()]
+
+    print(xs)
+    print(ys)
+    print(first_days)
+
+    print('plot!')
+    plot.my_plot(xs, ys)
+1
 def main():
     result = simulate(config.num_players)
-    plot(result)
+    do_plot(result)
 
 if __name__ == '__main__':
     main()

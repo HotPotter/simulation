@@ -4,7 +4,7 @@ from collections import defaultdict
 '''simulation configuration - USER INPUT'''
 fragments_per_box = 5
 pool_name = 'remove'
-num_players = 1
+num_players = 10000
 
 
 
@@ -26,7 +26,7 @@ for hero in hero_data:
 
 
 
-print(heroes)
+#print(heroes)
 
 
 
