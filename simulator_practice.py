@@ -60,21 +60,20 @@ def simulate(num_players):
 def do_plot(result):
     print('Plot matplotlib:')
     pprint(result)
-    first_days = []
+    first_hero = []
     for days in result:
-        first_days.append(min(days))
+        first_hero.append(min(days))
 
-    c = collections.Counter(first_days)
+    c = collections.Counter(first_hero)
     xs = []
     ys = []
     for x, y in c.items():
         xs.append(x)
         ys.append(y)
-    #c1 = [(x, y) for x, y in c.items()]
 
     print(xs)
     print(ys)
-    print(first_days)
+    print(first_hero)
 
     print('plot!')
     plot.my_plot(xs, ys)
